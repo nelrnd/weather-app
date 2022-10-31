@@ -1,17 +1,26 @@
 const searchForm = document.getElementById('search-city-weather');
 const cityNameInput = document.getElementById('city-name');
 
-searchForm.onsubmit = (e) => {
+const weatherInfoElems = {
+  city: document.querySelector('#weather-info .city'),
+  temp: document.querySelector('#weather-info .temp'),
+  desc: document.querySelector('#weather-info .desc'),
+};
+
+searchForm.onsubmit = handleSearchForm;
+
+async function handleSearchForm(e) {
   e.preventDefault();
 
   const cityName = cityNameInput.value;
 
   if (cityName) {
-    const weatherInfo = getWeatherInfo(cityName);
-    weatherInfo.then((info) => console.log(info));
+    const data = await getWeatherData(cityName);
+    const info = getWeatherInfo(data);
+    displayWeatherInfo(info);
     cityNameInput.value = '';
   }
-};
+}
 
 async function getWeatherData(cityName) {
   try {
@@ -24,21 +33,17 @@ async function getWeatherData(cityName) {
 
     const data = await response.json();
 
-    console.log(data.weather);
-
     if (!response.ok) {
       throw new Error(data.message);
     }
 
     return data;
   } catch (err) {
-    console.error(err);
+    displayError(err);
   }
 }
 
-async function getWeatherInfo(cityName) {
-  const data = await getWeatherData(cityName);
-
+function getWeatherInfo(data) {
   const weatherInfo = {
     cityName: data.name,
     temp: data.main.temp,
@@ -47,4 +52,20 @@ async function getWeatherInfo(cityName) {
   };
 
   return weatherInfo;
+}
+
+function displayWeatherInfo(info) {
+  const { city, temp, desc } = weatherInfoElems;
+
+  city.textContent = info.cityName;
+  temp.textContent = info.temp;
+  desc.textContent = info.desc;
+}
+
+function displayError(msg) {
+  const { city, temp, desc } = weatherInfoElems;
+
+  city.textContent = msg;
+  temp.textContent = '';
+  desc.textContent = '';
 }
