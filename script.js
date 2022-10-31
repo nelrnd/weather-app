@@ -26,8 +26,9 @@ async function getWeatherData(cityName) {
   try {
     const BASE_URL = 'https://api.openweathermap.org/data/2.5/weather?';
     const API_KEY = 'f18ef5d5f0e1ffb4959bcbf4a5704d2d';
+    const url = new URL(encodeURI(`${BASE_URL}q=${cityName}&appid=${API_KEY}`));
 
-    const response = await fetch(`${BASE_URL}q=${cityName}&appid=${API_KEY}`, {
+    const response = await fetch(url.href, {
       mode: 'cors',
     });
 
@@ -68,4 +69,12 @@ function displayError(msg) {
   city.textContent = msg;
   temp.textContent = '';
   desc.textContent = '';
+}
+
+function convertKelvinToCelcius(temp) {
+  return Math.round(Math.round(temp) - 273.15);
+}
+
+function convertKelvinToFahrenheit(temp) {
+  return Math.round(((Math.round(temp) - 273.15) * 9) / 5 + 32);
 }
