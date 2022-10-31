@@ -24,6 +24,8 @@ async function getWeatherData(cityName) {
 
     const data = await response.json();
 
+    console.log(data.weather);
+
     if (!response.ok) {
       throw new Error(data.message);
     }
