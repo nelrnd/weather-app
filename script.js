@@ -1,19 +1,18 @@
-const searchForm = document.getElementById('search-city-weather');
-const cityNameInput = document.getElementById('city-name');
+const searchForm = document.getElementById('search-form');
+const searchInput = document.getElementById('location-search-input');
 
-searchForm.onsubmit = handleSearchForm;
+searchForm.onsubmit = handleSearch;
 
-async function handleSearchForm(e) {
+async function handleSearch(e) {
   e.preventDefault();
 
-  const cityName = cityNameInput.value;
+  const location = searchInput.value;
+  const data = await getWeatherData(location);
+  const info = getWeatherInfo(data);
+  displayWeatherInfo(info);
 
-  if (cityName) {
-    const data = await getWeatherData(cityName);
-    const info = getWeatherInfo(data);
-    displayWeatherInfo(info);
-    cityNameInput.value = '';
-  }
+  // Clear input after search
+  searchInput.value = '';
 }
 
 async function getWeatherData(location) {
@@ -26,8 +25,6 @@ async function getWeatherData(location) {
 
   const data = await response.json();
 
-  console.log(data);
-
   return data;
 }
 
@@ -36,7 +33,7 @@ function getWeatherInfo(data) {
 
   info.city = data.name;
   info.country = data.sys.country;
-  info.desc = data.weather.description;
+  info.desc = data.weather[0].description;
   info.temp = data.main.temp;
   info.feels_like = data.main.feels_like;
   info.visibility = data.visibility;
@@ -111,7 +108,7 @@ function formatVisibility(value) {
 }
 
 function formatWindSpeed(value) {
-  return value * 3.502 + 'km/h';
+  return Math.round(value * 3.502) + 'km/h';
 }
 
 function formatWindDirection(value) {

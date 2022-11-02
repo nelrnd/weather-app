@@ -1,9 +1,16 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+
+:root {
+  --dk: #1a1a1a;
+  --md: #2d2d2d;
+  --lt: #aaaaaa;
+}
+
 * {
-  /*
   margin: 0;
   padding: 0;
-  */
   box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
 }
 
 html,
@@ -12,5 +19,64 @@ body {
 }
 
 body {
-  font-family: sans-serif;
+  color: white;
+  background-color: var(--dk);
+}
+
+form#search-form {
+  width: fit-content;
+  margin-top: 84px;
+  margin: 84px auto 0;
+  position: relative;
+}
+
+form#search-form input[type='search'] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -o-appearance: none;
+  appearance: none;
+
+  display: block;
+  width: calc(225px - 24px);
+  margin-right: 24px;
+  font-size: 100%;
+  padding: 11px 28px 11px 12px;
+  border-radius: 8px;
+  border: none;
+  color: white;
+  background-color: var(--md);
+}
+
+form#search-form input[type='search']:focus {
+  outline: none;
+}
+
+form#search-form input[type='search']::placeholder {
+  color: var(--lt);
+}
+
+form#search-form button[type='submit'] {
+  display: block;
+  width: 48px;
+  height: 48px;
+  background-color: white;
+  border-radius: 24px;
+  border: none;
+  cursor: pointer;
+
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+
+  transition: background-color 200ms ease-in-out;
+}
+
+form#search-form button[type='submit']:hover {
+  background-color: #ddd;
+}
+
+form#search-form button[type='submit'] img {
+  position: relative;
+  top: 2px;
 }
