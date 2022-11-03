@@ -2,26 +2,19 @@ const searchForm = document.getElementById('search-form');
 const searchInput = document.getElementById('location-search-input');
 const tempSwitch = document.getElementById('temp-switch');
 
+let weatherInfo = null;
 let degree_unit = 'celsius';
 
 searchForm.onsubmit = handleSearch;
-
-tempSwitch.onchange = (e) => {
-  if (degree_unit === 'celsius') {
-    degree_unit = 'fahrenheit';
-  } else {
-    degree_unit = 'celsius';
-  }
-  console.log(degree_unit);
-};
+tempSwitch.onchange = handleTempSwitch;
 
 async function handleSearch(e) {
   e.preventDefault();
 
   const location = searchInput.value;
   const data = await getWeatherData(location);
-  const info = getWeatherInfo(data);
-  displayWeatherInfo(info);
+  weatherInfo = getWeatherInfo(data);
+  displayWeatherInfo(weatherInfo);
 
   // Clear input after search
   searchInput.value = '';
@@ -40,6 +33,18 @@ async function getWeatherData(location) {
   console.log(data);
 
   return data;
+}
+
+function handleTempSwitch() {
+  if (degree_unit === 'celsius') {
+    degree_unit = 'fahrenheit';
+  } else {
+    degree_unit = 'celsius';
+  }
+
+  if (weatherInfo) {
+    displayWeatherInfo(weatherInfo);
+  }
 }
 
 function getWeatherInfo(data) {
@@ -110,7 +115,12 @@ function createDetailsItem(name, value) {
 }
 
 function formatTemperature(value) {
-  return Math.round(Math.round(value) - 273.15) + '°C';
+  value = Math.floor(value);
+  if (degree_unit === 'celsius') {
+    return Math.round(value - 273.15) + '°C';
+  } else if (degree_unit === 'fahrenheit') {
+    return Math.round(((value - 273.15) * 9) / 5 + 32) + '°F';
+  }
 }
 
 function formatVisibility(value) {
