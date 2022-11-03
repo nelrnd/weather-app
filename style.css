@@ -16,6 +16,7 @@
 body {
   color: white;
   font-size: 1rem;
+  padding: 0 270px;
   background-color: var(--dk);
 }
 
@@ -124,4 +125,61 @@ form#search-form button[type='submit'] img {
 
 #weather-info .details-item-name {
   color: var(--lt);
+}
+
+/* Switch temp converter */
+
+.temp-converter {
+  position: absolute;
+  bottom: 64px;
+}
+
+.temp-converter-label {
+  font-size: 12px;
+  color: var(--lt);
+  text-align: center;
+  margin-bottom: 6px;
+}
+
+#temp-switch {
+  display: none;
+}
+
+.temp-converter .switch label {
+  width: 87px;
+  height: 35px;
+  border: solid 2px var(--md);
+  border-radius: 16px;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.temp-converter .switch label span {
+  text-align: center;
+}
+
+.temp-converter .switch label span.bar {
+  width: 2px;
+  height: 100%;
+  background-color: var(--md);
+}
+
+.temp-converter .switch label::before {
+  content: '';
+  display: block;
+  position: absolute;
+  right: 50%;
+  z-index: -1;
+  height: 100%;
+  width: 50%;
+  background-color: var(--md);
+  transition: right 300ms ease-in-out;
+}
+
+.temp-converter .switch #temp-switch:checked + label::before {
+  right: 0;
 }

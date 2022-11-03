@@ -1,7 +1,19 @@
 const searchForm = document.getElementById('search-form');
 const searchInput = document.getElementById('location-search-input');
+const tempSwitch = document.getElementById('temp-switch');
+
+let degree_unit = 'celsius';
 
 searchForm.onsubmit = handleSearch;
+
+tempSwitch.onchange = (e) => {
+  if (degree_unit === 'celsius') {
+    degree_unit = 'fahrenheit';
+  } else {
+    degree_unit = 'celsius';
+  }
+  console.log(degree_unit);
+};
 
 async function handleSearch(e) {
   e.preventDefault();
@@ -24,6 +36,8 @@ async function getWeatherData(location) {
   );
 
   const data = await response.json();
+
+  console.log(data);
 
   return data;
 }
