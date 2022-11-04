@@ -4,6 +4,7 @@
   --dk: #1a1a1a;
   --md: #2d2d2d;
   --lt: #aaaaaa;
+  --red: #e3474b;
 }
 
 * {
@@ -191,6 +192,70 @@ form#search-form button[type='submit'] img {
 
 .temp-converter .switch #temp-switch:checked + label::after {
   right: 0;
+}
+
+/* Error message styling */
+
+@keyframes error-appear {
+  from {
+    opacity: 0;
+    transform: translateY(-100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+}
+
+@keyframes error-disappear {
+  from {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-100px);
+  }
+}
+
+.error-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding-top: 1rem;
+}
+
+.error {
+  font-size: 14px;
+  text-align: center;
+  color: white;
+  background-color: var(--red);
+  width: 300px;
+  max-width: 100%;
+  padding: 8px;
+  margin: 0 auto;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+
+  display: grid;
+  grid-template-columns: 1fr auto;
+}
+
+.error-close-btn {
+  width: 20px;
+  height: 20px;
+  border: none;
+  background-color: transparent;
+  background-image: url('assets/icons/close.svg');
+  cursor: pointer;
+}
+
+.new-error {
+  animation: error-appear 300ms ease-in;
+}
+.bye-error {
+  animation: error-disappear 300ms ease-out;
 }
 
 /* Mobile styling */

@@ -11,10 +11,16 @@ tempSwitch.onchange = handleTempSwitch;
 async function handleSearch(e) {
   e.preventDefault();
 
-  const location = searchInput.value;
-  const data = await getWeatherData(location);
-  weatherInfo = getWeatherInfo(data);
-  displayWeatherInfo(weatherInfo);
+  try {
+    const location = searchInput.value;
+    if (!location) return;
+    const data = await getWeatherData(location);
+    if (data.cod === '404') throw new Error('Could not find specified city');
+    weatherInfo = getWeatherInfo(data);
+    displayWeatherInfo(weatherInfo);
+  } catch (err) {
+    displayError(err.message);
+  }
 
   // Clear input after search
   searchInput.value = '';
@@ -29,8 +35,6 @@ async function getWeatherData(location) {
   );
 
   const data = await response.json();
-
-  console.log(data);
 
   return data;
 }
@@ -168,4 +172,31 @@ function formatTime(dt, tz) {
 
 function upperFirstLetter(string) {
   return string.slice(0, 1).toUpperCase() + string.slice(1).toLowerCase();
+}
+
+function displayError(msg) {
+  const err_container = document.querySelector('.error-container');
+  const err_elem = document.createElement('div');
+  const err_text = document.createElement('span');
+  const close_btn = document.createElement('button');
+
+  err_elem.classList.add('error', 'new-error');
+  close_btn.className = 'error-close-btn';
+
+  err_text.textContent = msg;
+
+  close_btn.onclick = () => {
+    clearTimeout(remove);
+    removeError.call(err_elem);
+  };
+
+  err_elem.append(err_text, close_btn);
+  err_container.appendChild(err_elem);
+
+  const remove = setTimeout(removeError.bind(err_elem), 3000);
+}
+
+function removeError() {
+  this.classList.add('bye-error');
+  setTimeout(() => this.remove(), 300);
 }
