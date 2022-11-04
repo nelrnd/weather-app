@@ -12,7 +12,7 @@ function handleSearch(e) {
   e.preventDefault();
 
   let location = searchInput.value;
-  location = location.trim().replace(/ +/g, '_');
+  location = location.trim();
   if (!location) return;
 
   makeSearch(location);

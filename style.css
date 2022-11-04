@@ -24,6 +24,9 @@ body {
   font-size: 1rem;
   padding: 8vh 18.75vw 0 18.75vw;
   background-color: var(--dk);
+  background-image: url('assets/images/background.jpg');
+  background-position: top;
+  background-size: cover;
 }
 
 /* Search bar styling */
@@ -89,11 +92,11 @@ form#search-form button[type='submit'] img {
 
 @keyframes info-appear {
   from {
-    transform: translateY(50px);
+    transform: translateY(50px) scale(0.9);
     opacity: 0;
   }
   to {
-    transform: translateY(0px);
+    transform: translateY(0px) scale(1);
     opacity: 1;
   }
 }
