@@ -8,12 +8,21 @@ let degree_unit = 'celsius';
 searchForm.onsubmit = handleSearch;
 tempSwitch.onchange = handleTempSwitch;
 
-async function handleSearch(e) {
+function handleSearch(e) {
   e.preventDefault();
 
+  let location = searchInput.value;
+  location = location.trim().replace(/ +/g, '_');
+  if (!location) return;
+
+  makeSearch(location);
+
+  // Clear input after search
+  searchInput.value = '';
+}
+
+async function makeSearch(location) {
   try {
-    const location = searchInput.value;
-    if (!location) return;
     const data = await getWeatherData(location);
     if (data.cod === '404') throw new Error('Could not find specified city');
     weatherInfo = getWeatherInfo(data);
@@ -21,9 +30,6 @@ async function handleSearch(e) {
   } catch (err) {
     displayError(err.message);
   }
-
-  // Clear input after search
-  searchInput.value = '';
 }
 
 async function getWeatherData(location) {
@@ -205,3 +211,7 @@ function removeError() {
   this.classList.add('bye-error');
   setTimeout(() => this.remove(), 300);
 }
+
+// Demo purpose
+
+makeSearch('paris');
