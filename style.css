@@ -13,10 +13,15 @@
   font-family: 'Inter', sans-serif;
 }
 
+html {
+  height: 100%;
+}
+
 body {
+  min-height: 100%;
   color: white;
   font-size: 1rem;
-  padding: 0 270px;
+  padding: 8vh 18.75vw 0 18.75vw;
   background-color: var(--dk);
 }
 
@@ -24,8 +29,7 @@ body {
 
 form#search-form {
   width: fit-content;
-  margin-top: 84px;
-  margin: 84px auto 0;
+  margin: 0 auto;
   position: relative;
 }
 
@@ -83,8 +87,9 @@ form#search-form button[type='submit'] img {
 /* Weather info styling */
 
 #weather-info {
-  max-width: 450px;
-  margin: 96px auto 0;
+  width: 31.25vw;
+  min-width: 450px;
+  margin: 9vh auto 0;
   text-align: center;
 }
 
@@ -130,8 +135,9 @@ form#search-form button[type='submit'] img {
 /* Switch temp converter */
 
 .temp-converter {
-  position: absolute;
+  position: fixed;
   bottom: 64px;
+  width: fit-content;
 }
 
 .temp-converter-label {
@@ -148,6 +154,7 @@ form#search-form button[type='submit'] img {
 .temp-converter .switch label {
   width: 87px;
   height: 35px;
+  background-color: var(--dk);
   border: solid 2px var(--md);
   border-radius: 16px;
   display: grid;
@@ -160,6 +167,8 @@ form#search-form button[type='submit'] img {
 
 .temp-converter .switch label span {
   text-align: center;
+  position: relative;
+  z-index: 2;
 }
 
 .temp-converter .switch label span.bar {
@@ -168,18 +177,52 @@ form#search-form button[type='submit'] img {
   background-color: var(--md);
 }
 
-.temp-converter .switch label::before {
+.temp-converter .switch label::after {
   content: '';
   display: block;
   position: absolute;
   right: 50%;
-  z-index: -1;
+  z-index: 0;
   height: 100%;
   width: 50%;
   background-color: var(--md);
   transition: right 300ms ease-in-out;
 }
 
-.temp-converter .switch #temp-switch:checked + label::before {
+.temp-converter .switch #temp-switch:checked + label::after {
   right: 0;
+}
+
+/* Mobile styling */
+
+@media screen and (max-width: 750px) {
+  body {
+    padding: 8vw 16px 0 16px;
+  }
+  #weather-info {
+    width: 100%;
+    min-width: initial;
+  }
+  #weather-info .details {
+    column-gap: 16px;
+  }
+  .temp-converter {
+    bottom: 16px;
+  }
+}
+
+@media screen and (max-width: 420px) {
+  #weather-info .city {
+    font-size: 24px;
+    margin-bottom: 4px;
+  }
+
+  #weather-info .temp {
+    font-size: 64px;
+    margin-bottom: 4px;
+  }
+
+  #weather-info .details-item {
+    font-size: 12px;
+  }
 }
