@@ -87,11 +87,26 @@ form#search-form button[type='submit'] img {
 
 /* Weather info styling */
 
+@keyframes info-appear {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+}
+
 #weather-info {
   width: 31.25vw;
   min-width: 450px;
   margin: 9vh auto 0;
   text-align: center;
+}
+
+#weather-info.appear {
+  animation: info-appear 400ms ease-in-out;
 }
 
 #weather-info .city {
@@ -133,7 +148,7 @@ form#search-form button[type='submit'] img {
   color: var(--lt);
 }
 
-/* Switch temp converter */
+/* Temp converter styling */
 
 .temp-converter {
   position: fixed;

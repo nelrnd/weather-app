@@ -17,7 +17,7 @@ async function handleSearch(e) {
     const data = await getWeatherData(location);
     if (data.cod === '404') throw new Error('Could not find specified city');
     weatherInfo = getWeatherInfo(data);
-    displayWeatherInfo(weatherInfo);
+    displayWeatherInfo(weatherInfo, true);
   } catch (err) {
     displayError(err.message);
   }
@@ -71,7 +71,7 @@ function getWeatherInfo(data) {
   return info;
 }
 
-function displayWeatherInfo(info) {
+function displayWeatherInfo(info, newCity) {
   const container = document.getElementById('weather-info');
   const city_elem = document.createElement('div');
   const temp_elem = document.createElement('div');
@@ -82,6 +82,11 @@ function displayWeatherInfo(info) {
   temp_elem.classList.add('temp');
   desc_elem.classList.add('desc');
   details_elem.classList.add('details');
+
+  if (newCity) {
+    container.classList.add('appear');
+    setTimeout(() => container.classList.remove('appear'), 400);
+  }
 
   city_elem.textContent = `${info.city}, ${info.country}`;
   temp_elem.textContent = formatTemperature(info.temp);
