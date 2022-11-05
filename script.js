@@ -118,7 +118,7 @@ function displayWeatherInfo(info, isNewSearch) {
 
     timeElem.textContent = formatTime(prop.time, info.timezone);
     tempElem.textContent = formatTemperature(prop.temp);
-    iconElem.src = `/assets/icons/${prop.icon}.svg`;
+    iconElem.src = `./assets/icons/${prop.icon}.svg`;
     iconElem.alt = prop.icon.toString();
 
     degreeModule.addElem(tempElem, prop.temp);
