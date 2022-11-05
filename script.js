@@ -3,6 +3,7 @@ const searchInput = document.getElementById('location-search-input');
 const tempSwitch = document.getElementById('temp-switch');
 
 let weatherInfo = null;
+let forecastInfo = null;
 let degree_unit = 'celsius';
 
 searchForm.onsubmit = handleSearch;
@@ -23,10 +24,15 @@ function handleSearch(e) {
 
 async function makeSearch(location) {
   try {
-    const data = await getWeatherData(location);
-    if (data.cod === '404') throw new Error('Could not find specified city');
-    weatherInfo = getWeatherInfo(data);
+    const weatherData = await getWeatherData(location);
+    const forecastData = await getForecastData(location);
+    if (weatherData.cod === '404') {
+      throw new Error('Could not find specified city');
+    }
+    weatherInfo = getWeatherInfo(weatherData);
+    forecastInfo = getForecastInfo(forecastData);
     displayWeatherInfo(weatherInfo, true);
+    displayForecastInfo(forecastInfo, true);
   } catch (err) {
     displayError(err.message);
   }
@@ -54,6 +60,7 @@ function handleTempSwitch() {
 
   if (weatherInfo) {
     displayWeatherInfo(weatherInfo);
+    displayForecastInfo(forecastInfo);
   }
 }
 
@@ -185,6 +192,53 @@ function upperFirstLetter(string) {
   return string.slice(0, 1).toUpperCase() + string.slice(1).toLowerCase();
 }
 
+function getWeatherIcon(code) {
+  let icon = '';
+
+  switch (code) {
+    case '01d':
+      icon = 'sun';
+      break;
+    case '01n':
+      icon = 'moon';
+      break;
+    case '02d':
+      icon = 'cloud-sun';
+      break;
+    case '02n':
+      icon = 'cloud-moon';
+      break;
+    case '03d':
+    case '03n':
+    case '04d':
+    case '04n':
+      icon = 'cloud';
+      break;
+    case '09d':
+    case '09n':
+    case '10d':
+    case '10n':
+      icon = 'rain';
+      break;
+    case '11d':
+    case '11n':
+      icon = 'thunder';
+      break;
+    case '13d':
+    case '13n':
+      icon = 'snow';
+      break;
+    case '50d':
+    case '50n':
+      icon = 'mist';
+      break;
+    default:
+      break;
+  }
+
+  return icon;
+}
+
 function displayError(msg) {
   const err_container = document.querySelector('.error-container');
   const err_elem = document.createElement('div');
@@ -215,3 +269,86 @@ function removeError() {
 // Demo purpose
 
 makeSearch('paris');
+
+async function getForecastData(location) {
+  const response = await fetch(
+    `https://api.openweathermap.org/data/2.5/forecast?q=${location}&appid=f18ef5d5f0e1ffb4959bcbf4a5704d2d`,
+    {
+      mode: 'cors',
+    }
+  );
+
+  const data = await response.json();
+
+  getForecastInfo(data);
+
+  return data;
+}
+
+function getForecastInfo(data) {
+  const info = [];
+
+  for (item of data.list) {
+    const obj = {};
+
+    obj.time = item.dt_txt.split(' ')[1].slice(0, -3);
+    obj.icon = getWeatherIcon(item.weather[0].icon);
+    obj.temp = item.main.temp;
+
+    info.push(obj);
+  }
+
+  console.log(info);
+
+  return info;
+}
+
+function displayForecastInfo(info) {
+  const info_elem = document.querySelector('#weather-info');
+  const container = document.createElement('div');
+  container.className = 'forecast-section';
+
+  let first = true;
+
+  for (item of info) {
+    const elem = document.createElement('div');
+    const time_elem = document.createElement('span');
+    const icon_elem = document.createElement('img');
+    const temp_elem = document.createElement('span');
+
+    elem.className = 'forecast-card';
+
+    time_elem.textContent = first ? 'now' : item.time;
+    first = false;
+    icon_elem.src = `/assets/icons/${item.icon}.svg`;
+    icon_elem.alt = item.icon;
+    temp_elem.textContent = formatTemperature(item.temp);
+
+    elem.append(time_elem, icon_elem, temp_elem);
+
+    container.appendChild(elem);
+  }
+
+  const scrollPos = { start: null, new: null };
+
+  container.addEventListener('mousedown', (event) => {
+    if (event.button === 0) {
+      scrollPos.start = event.clientX;
+      window.addEventListener('mousemove', scrollElem);
+    }
+  });
+
+  function scrollElem(event) {
+    if (event.buttons === 0) {
+      window.removeEventListener('mousemove', scrollElem);
+    } else {
+      scrollPos.new = scrollPos.start - event.clientX;
+      container.scrollLeft += scrollPos.new;
+      scrollPos.start = event.clientX;
+    }
+  }
+
+  info_elem.appendChild(container);
+}
+
+getForecastData('paris');

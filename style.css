@@ -15,18 +15,20 @@
 }
 
 html {
-  height: 100%;
+  min-height: 100%;
+  border: solid 1px black;
 }
 
 body {
   min-height: 100%;
   color: white;
   font-size: 1rem;
-  padding: 8vh 18.75vw 0 18.75vw;
+  padding: 8vh 18.75vw 8vh 18.75vw;
   background-color: var(--dk);
   background-image: url('assets/images/background.jpg');
   background-position: top;
   background-size: cover;
+  background-attachment: fixed;
 }
 
 /* Search bar styling */
@@ -102,9 +104,7 @@ form#search-form button[type='submit'] img {
 }
 
 #weather-info {
-  width: 31.25vw;
-  min-width: 450px;
-  margin: 9vh auto 0;
+  margin: 9vh auto 18vh;
   text-align: center;
 }
 
@@ -123,6 +123,9 @@ form#search-form button[type='submit'] img {
 }
 
 #weather-info .details {
+  width: 31.25vw;
+  min-width: 450px;
+  margin: 0 auto;
   margin-top: 48px;
   list-style: none;
 
@@ -139,7 +142,7 @@ form#search-form button[type='submit'] img {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: solid 2px var(--md);
+  border-bottom: solid 1px var(--lt);
 }
 
 #weather-info .details-item:nth-of-type(7),
@@ -149,6 +152,49 @@ form#search-form button[type='submit'] img {
 
 #weather-info .details-item-name {
   color: var(--lt);
+}
+
+/* Weather forecast styling */
+
+.forecast-section {
+  width: calc(31.25vw + 2rem);
+  min-width: 450px;
+  margin: 4vh auto 0 auto;
+  padding: 0 1rem 1rem 1rem;
+  overflow-x: auto;
+  text-align: center;
+
+  display: flex;
+  flex-direction: row;
+  gap: 1.5rem;
+}
+
+.forecast-section::-webkit-scrollbar {
+  height: 8px;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.forecast-section::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.forecast-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.forecast-card img {
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  user-drag: none;
 }
 
 /* Temp converter styling */
@@ -282,7 +328,8 @@ form#search-form button[type='submit'] img {
   body {
     padding: 8vw 16px 0 16px;
   }
-  #weather-info {
+  #weather-info .details,
+  .forecast-section {
     width: 100%;
     min-width: initial;
   }
